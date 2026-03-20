@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Monitor</title>
+  <meta name="description" content="Real-time network monitoring dashboard — latency, packet loss, bandwidth, and interface stats." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12h4l3-9 4 18 3-9h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">NetMonitor</span>
+      </div>
+      <div class="header-right">
+        <div class="connection-badge" id="connectionBadge">
+          <span class="badge-dot"></span>
+          <span class="badge-label" id="connectionLabel">Connecting…</span>
+        </div>
+        <div class="header-time" id="headerTime"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Status Bar -->
+    <section class="status-bar">
+      <div class="status-card" id="statusCard">
+        <div class="status-icon" id="statusIcon">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="status-info">
+          <p class="status-label">Network Status</p>
+          <h2 class="status-value" id="statusValue">—</h2>
+        </div>
+        <div class="status-metrics">
+          <div class="sm-item">
+            <span class="sm-label">Hostname</span>
+            <span class="sm-value mono" id="hostname">—</span>
+          </div>
+          <div class="sm-item">
+            <span class="sm-label">Platform</span>
+            <span class="sm-value mono" id="platform">—</span>
+          </div>
+          <div class="sm-item">
+            <span class="sm-label">Uptime</span>
+            <span class="sm-value mono" id="uptime">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI Row -->
+    <section class="kpi-row">
+      <!-- Latency -->
+      <div class="kpi-card" id="latencyCard">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--blue">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <span class="kpi-label">Latency (8.8.8.8)</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="latencyValue">—</span>
+          <span class="kpi-unit">ms</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill" id="latencyBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="latencyRating">—</span>
+        </div>
+      </div>
+
+      <!-- Packet Loss -->
+      <div class="kpi-card" id="packetLossCard">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--purple">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="kpi-label">Packet Loss</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="packetLossValue">—</span>
+          <span class="kpi-unit">%</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-fill--danger" id="packetLossBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="packetLossRating">—</span>
+        </div>
+      </div>
+
+      <!-- Download -->
+      <div class="kpi-card" id="downloadCard">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--green">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="7 10 12 15 17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="kpi-label">Download</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="downloadValue">—</span>
+          <span class="kpi-unit" id="downloadUnit">Mbps</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-fill--green" id="downloadBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="downloadRating">Live</span>
+        </div>
+      </div>
+
+      <!-- Upload -->
+      <div class="kpi-card" id="uploadCard">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--orange">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="kpi-label">Upload</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="uploadValue">—</span>
+          <span class="kpi-unit" id="uploadUnit">Mbps</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-fill--orange" id="uploadBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="uploadRating">Live</span>
+        </div>
+      </div>
+
+      <!-- CPU Load -->
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--pink">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/><rect x="9" y="9" width="6" height="6" stroke="currentColor" stroke-width="2"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="kpi-label">CPU Load</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="cpuValue">—</span>
+          <span class="kpi-unit">%</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-fill--pink" id="cpuBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="cpuRating">—</span>
+        </div>
+      </div>
+
+      <!-- Memory -->
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-icon kpi-icon--teal">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="kpi-label">Memory Usage</span>
+        </div>
+        <div class="kpi-value-wrap">
+          <span class="kpi-value" id="memValue">—</span>
+          <span class="kpi-unit">%</span>
+        </div>
+        <div class="kpi-bar-wrap">
+          <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-fill--teal" id="memBar" style="width:0%"></div></div>
+          <span class="kpi-bar-label" id="memRating">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts + Hosts -->
+    <section class="mid-row">
+      <!-- Latency Chart -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3 class="card-title">Latency History <span class="card-subtitle">Last 60 seconds</span></h3>
+          <div class="legend">
+            <span class="legend-dot" style="background:#00d4ff"></span><span>8.8.8.8</span>
+            <span class="legend-dot" style="background:#7c3aed"></span><span>1.1.1.1</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="latencyChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Bandwidth Chart -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3 class="card-title">Bandwidth <span class="card-subtitle">Live transfer rate</span></h3>
+          <div class="legend">
+            <span class="legend-dot" style="background:#22c55e"></span><span>RX</span>
+            <span class="legend-dot" style="background:#f97316"></span><span>TX</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="bandwidthChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hosts + Interfaces -->
+    <section class="bottom-row">
+      <!-- Host Ping Panel -->
+      <div class="card hosts-card">
+        <div class="card-header">
+          <h3 class="card-title">Host Ping Status</h3>
+        </div>
+        <div class="hosts-list" id="hostsList">
+          <div class="host-item skeleton"><div class="host-name">Loading…</div></div>
+          <div class="host-item skeleton"><div class="host-name">Loading…</div></div>
+          <div class="host-item skeleton"><div class="host-name">Loading…</div></div>
+          <div class="host-item skeleton"><div class="host-name">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- Network Interfaces -->
+      <div class="card ifaces-card">
+        <div class="card-header">
+          <h3 class="card-title">Network Interfaces</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="ifaces-table">
+            <thead>
+              <tr>
+                <th>Interface</th>
+                <th>IP Address</th>
+                <th>MAC</th>
+                <th>Type</th>
+                <th>State</th>
+              </tr>
+            </thead>
+            <tbody id="ifacesBody">
+              <tr><td colspan="5" class="table-empty">Waiting for data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>NetMonitor © 2025 — Real-time network diagnostics dashboard</span>
+      <span class="footer-tag">Powered by Node.js + WebSocket</span>
+    </footer>
+  </main>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
