@@ -2,7 +2,7 @@
 
 A sleek, real-time network monitoring dashboard built with **HTML/CSS/JavaScript** on the frontend and **Node.js + Express** on the backend. Fully containerized with Docker and ready to push to Docker Hub.
 
-![Dashboard Preview](https://img.shields.io/badge/status-live-brightgreen) ![Docker](https://img.shields.io/badge/docker-ready-blue) ![Node.js](https://img.shields.io/badge/node-20--alpine-green)
+![Dashboard Preview](https://img.shields.io/badge/status-live-brightgreen) ![Docker](https://img.shields.io/badge/docker-ready-blue) ![Node.js](https://img.shields.io/badge/node-22--alpine-green)
 
 ---
 
@@ -92,6 +92,21 @@ docker push YOUR_USERNAME/network-monitor:latest
 
 ---
 
+## 📦 Docker Hub Overview
+
+`network-monitor` is a production-ready Docker image for a real-time network monitoring dashboard. It exposes live latency, packet loss, bandwidth, CPU, memory, and interface metrics through a web UI backed by Node.js and WebSocket updates.
+
+### Highlights
+- Live network telemetry with real-time charts and status panels
+- Ping-based host monitoring with container-friendly `NET_RAW` support
+- Node.js 22 Alpine runtime with updated base image packages
+- Non-root runtime user and Docker-friendly deployment workflow
+
+### Suggested Docker Hub description
+A real-time Dockerized network monitoring dashboard built with Node.js. Monitor latency, packet loss, bandwidth, CPU, memory, and network interfaces with live WebSocket updates, ping-based checks, and a secure Alpine-based runtime.
+
+---
+
 ## 🔌 API Endpoints
 
 | Method | Endpoint | Description |
@@ -120,7 +135,7 @@ Set via environment variable or in `docker-compose.yml`.
 - **Backend** — [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/) + [ws](https://github.com/websockets/ws)
 - **System Metrics** — [systeminformation](https://systeminformation.io/)
 - **Ping** — [ping](https://www.npmjs.com/package/ping) (wraps OS ping binary)
-- **Container** — Docker Alpine (`node:20-alpine`)
+- **Container** — Docker Alpine (`node:22-alpine`)
 
 ---
 
