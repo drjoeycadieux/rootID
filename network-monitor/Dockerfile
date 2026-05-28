@@ -1,21 +1,18 @@
 # ── Builder stage ────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
-
-# Install native ping utility
-RUN apk add --no-cache iputils
 
 COPY package*.json ./
 RUN npm ci --only=production
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
-# ping binary needs NET_RAW capability; iputils provides it
-RUN apk add --no-cache iputils
+# Update Alpine packages and install ping utility for NET_RAW workloads.
+RUN apk update && apk upgrade --no-cache && apk add --no-cache iputils
 
 # Copy production node_modules from builder
 COPY --from=builder /app/node_modules ./node_modules
